@@ -293,6 +293,10 @@ class SoptMdApi(MdApi):
         dt: datetime = datetime.strptime(timestamp, "%Y%m%d %H:%M:%S.%f")
         dt: datetime = dt.replace(tzinfo=CHINA_TZ)
 
+        # SSH交易所的UpdateTime是成交时间，不是bid ask更新的时间，这里调整成收到时间
+        if contract.exchange == Exchange.SSE:
+            dt = datetime.now()
+
         tick: TickData = TickData(
             symbol=symbol,
             exchange=contract.exchange,
